@@ -3,20 +3,7 @@ const weather = require('./weather')
 
 const yargs = require('../node_modules/yargs')
 
-yargs.command({
-    command: 'checkweather',
-    describe: 'to check the weather...',
-    builder: {
-        title: 'area',
-        describe: 'choose your area..',
-        demandOption: true
-    },
-    handler: function (argv) {
-        seeIt(argv.area)
-    }
-})
-
-const seeIt = (location) => {
+const myfunc = (location) => {
     geo.geo(location, (err, dataLocation) => {
         if (err === undefined) {
             weather.weather(dataLocation.lat, dataLocation.long, (err, data) => {
@@ -33,4 +20,21 @@ const seeIt = (location) => {
     })
 }
 
-seeIt('wroclaw')
+yargs.command({
+    command: 'checkweather',
+    describe: 'to check the weather...',
+    builder: {
+        area: {
+            describe: 'choose your area..',
+            demandOption: true,
+            type: 'string'
+        }
+    },
+    handler: function (argv) {
+        myfunc(argv.area)
+    }
+})
+
+yargs.parse()
+
+// seeIt('wroclaw')
